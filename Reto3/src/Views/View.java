@@ -6,12 +6,14 @@
 package Views;
 
 import Controllers.TicketController;
-import Models.Adult;
-import Models.Kids;
 import Models.Travelers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,10 +24,12 @@ public class View extends javax.swing.JFrame {
     /**
      * Creates new form View
      */
+    DefaultTableModel model ;
     public View() {
         initComponents();
         controller = new TicketController();
-        System.out.println(this.controller.findTickets().isEmpty());
+        this.loadC();
+        model = (DefaultTableModel) table.getModel();
     }
 
     /**
@@ -58,6 +62,13 @@ public class View extends javax.swing.JFrame {
         name = new javax.swing.JTextField();
         isChild = new javax.swing.JCheckBox();
         age = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        destino = new javax.swing.JComboBox<>();
+        price = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        totalPrice = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -112,13 +123,10 @@ public class View extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Apellido", "Destiono", "Precio"
             }
         ));
         jScrollPane2.setViewportView(table);
@@ -148,32 +156,51 @@ public class View extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("Destino");
+
+        destino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Destino 1", "Destino 2", "Destino 3", "Destino 4" }));
+        destino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                destinoActionPerformed(evt);
+            }
+        });
+
+        price.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        price.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        price.setText("0.00");
+
+        totalPrice.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        totalPrice.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        totalPrice.setText("0.00");
+
+        jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel13.setText(" Total  $");
+
+        jLabel11.setText("Costo");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(67, 67, 67)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(isChild)
+                        .addGap(18, 18, 18)
+                        .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(contact, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(documentType, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lastname, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(llegada)
-                            .addComponent(salida)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
@@ -189,22 +216,63 @@ public class View extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel8))
+                                .addGap(71, 71, 71)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(documentType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(destino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(181, 181, 181))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(63, 63, 63))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(isChild)
-                        .addGap(18, 18, 18)
-                        .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addGap(75, 75, 75)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(salida)
+                            .addComponent(llegada)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(294, Short.MAX_VALUE)
+                    .addComponent(totalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(53, 53, 53)))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(224, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(186, 186, 186)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addComponent(salida)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(salida)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(llegada)
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(destino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(price)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(documentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -233,15 +301,24 @@ public class View extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(isChild)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))
+                        .addComponent(isChild))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(56, 56, 56)
+                    .addComponent(totalPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(464, 464, 464)))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(52, 52, 52)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                    .addGap(461, 461, 461)))
         );
 
         jButton1.setText("Guardar");
@@ -252,6 +329,11 @@ public class View extends javax.swing.JFrame {
         });
 
         jButton2.setText("Imprimir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Consulatar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -278,7 +360,7 @@ public class View extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
@@ -289,33 +371,25 @@ public class View extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void salidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salidaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_salidaActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.getForm();
+        this.clear();
+        this.totalPrice.setText(this.controller.getTotal().toString());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void lastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastnameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lastnameActionPerformed
-
-    private void contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_contactActionPerformed
-
-    private void documentNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentNumberActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_documentNumberActionPerformed
-
-    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_emailActionPerformed
-
-    private void documentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_documentTypeActionPerformed
-
-    private void nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Travelers traveler = this.controller.findTraveler(Integer.parseInt(this.documentNumber.getText()));
+        if(traveler != null){
+            this.name.setText(""+traveler.getName());
+            this.lastname.setText(""+traveler.getLastname());
+            this.contact.setText(""+traveler.getContacto().toString());
+            this.email.setText(""+traveler.getCorreo());
+            this.gender.setSelectedItem(""+traveler.getGender());
+        }else{
+            JOptionPane.showMessageDialog(this, "No hay usuario registrados con este documento");
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void isChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isChildActionPerformed
 
@@ -326,16 +400,46 @@ public class View extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_isChildActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.getForm();
-        this.clear();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nameActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Travelers traveler = this.controller.findTraveler(Integer.parseInt(this.documentNumber.getText()));
-        this.name.setText(""+traveler.getDocumentNumber());
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailActionPerformed
 
+    private void documentNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_documentNumberActionPerformed
+
+    private void documentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_documentTypeActionPerformed
+
+    private void contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contactActionPerformed
+
+    private void lastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lastnameActionPerformed
+
+    private void salidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salidaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_salidaActionPerformed
+
+    private void destinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destinoActionPerformed
+       String item =(String) this.destino.getSelectedItem();
+       Double price = this.controller.getDestionoPrice(item);
+       this.price.setText(price.toString());
+        System.out.println(price);
+    }//GEN-LAST:event_destinoActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.controller.print();
+        this.model.setRowCount(0);
+        this.controller.entyTempData();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void start() {
         /* Set the Nimbus look and feel */
@@ -372,33 +476,32 @@ public class View extends javax.swing.JFrame {
     public void getForm(){
         boolean in = this.llegada.isSelected();
         boolean out = this.salida.isSelected();
+        Double tiketPrice = Double.parseDouble(this.price.getText());
         String docTp = (String) this.documentType.getSelectedItem();
-        int docN = Integer.parseInt(documentNumber.getText());
+        Integer docN = Integer.parseInt(documentNumber.getText());
         String nam = this.name.getText();
         String lastn = this.lastname.getText();
-        int cont = Integer.parseInt(this.contact.getText());
+        Integer cont = Integer.parseInt(this.contact.getText());
         String emal = this.email.getText();
         String gend = (String) this.gender.getSelectedItem();
+        String dest = (String) this.destino.getSelectedItem();
+                
+        Integer eg = null;
         
-        int eg ;
-        Travelers passenger;
-        if(!this.isChild.isSelected()){
-            passenger = new Adult(docTp, docN, nam, lastn, gend, cont, emal );
-        }else{
+        if(this.isChild.isSelected()){
             eg = Integer.parseInt(this.age.getText());
-            passenger = new Kids(docTp, docN, nam, lastn, gend, eg);
         }
-        this.controller.buy(passenger, "dd/mm/yy", in, out);
+        
+        Travelers passenger = new Travelers(docTp,docN,nam, lastn,cont,emal,gend, eg);
+        this.controller.buy(passenger, "dd/mm/yy", in, out, tiketPrice, dest);
         
         
-        System.out.println(this.controller.findTickets().isEmpty());
+        
+        this.model.addRow(new Object[]{nam, lastn, dest, tiketPrice.toString()});
         
     }
     public void clear(){
-        this.llegada.setSelected(false);
-        this.salida.setSelected(false);
-        //this.documentType.getSelectedItem();
-        documentNumber.setText("");
+        this.documentNumber.setText("");
         this.name.setText("");
         this.lastname.setText("");
         this.contact.setText("");;
@@ -406,10 +509,21 @@ public class View extends javax.swing.JFrame {
         //this.gender.getSelectedItem();
         
     }
+    
+    public void loadC(){
+        this.isChild.setSelected(true);
+        if(!this.isChild.isSelected()){
+            this.age.setVisible(false);
+        }
+        String selected = (String) this.destino.getSelectedItem();
+        this.price.setText(this.controller.getDestionoPrice(selected).toString());
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField age;
     private javax.swing.JTextField contact;
+    private javax.swing.JComboBox<String> destino;
     private javax.swing.JTextField documentNumber;
     private javax.swing.JComboBox<String> documentType;
     private javax.swing.JTextField email;
@@ -419,18 +533,24 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField lastname;
     private javax.swing.JCheckBox llegada;
     private javax.swing.JTextField name;
+    private javax.swing.JLabel price;
     private javax.swing.JCheckBox salida;
     private javax.swing.JTable table;
+    private javax.swing.JLabel totalPrice;
     // End of variables declaration//GEN-END:variables
 }
